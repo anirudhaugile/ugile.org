@@ -302,6 +302,7 @@
   }
 
   .nav-links { display: flex; gap: 36px; list-style: none; }
+  @media (max-width: 768px) { .nav-links { display: none !important; } .nav-links.open { display: flex !important; } }
 
   .nav-links a {
     font-size: 0.82rem;
