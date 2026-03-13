@@ -1,0 +1,1340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anirudha Ugile</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f5f2ec;
+    --surface: #ede9e1;
+    --border: #d8d2c6;
+    --border-light: #e4dfd5;
+    --text: #1a1815;
+    --muted: #6b6560;
+    --muted2: #9c9690;
+    --accent: #2d5a3d;
+    --accent-light: #deeae2;
+    --accent2: #7c5c3e;
+    --tag-bg: #e6e1d8;
+    --tag-text: #524e48;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    line-height: 1.65;
+    overflow-x: hidden;
+  }
+
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 64px;
+    background: rgba(245,242,236,0.72);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 2px solid var(--border);
+  }
+
+  .nav-hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 6px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 6px 4px;
+  }
+  .nav-hamburger span { display: block; width: 24px; height: 2px; background: var(--text); transition: all 0.3s; border-radius: 1px; }
+  .nav-hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+  .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+  .nav-hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+  /* NOW SECTION */
+  .now-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border-light);
+    border: 1px solid var(--border-light);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .now-col { background: var(--bg); padding: 28px 30px; }
+  .now-col-title {
+    font-size: 0.64rem;
+    color: var(--muted2);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 18px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border-light);
+  }
+  .now-item {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border-light);
+  }
+  .now-item:last-child { border-bottom: none; padding-bottom: 0; }
+  .now-item-title { font-size: 0.87rem; font-weight: 500; color: var(--text); }
+  .now-item-sub { font-size: 0.77rem; color: var(--muted); line-height: 1.5; }
+  .now-dot {
+    display: inline-block;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    margin-right: 7px;
+    vertical-align: middle;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.35; }
+  }
+
+  /* ABOUT SECTION */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: start;
+  }
+  .about-text { font-size: 0.9rem; color: var(--muted); line-height: 1.85; }
+  .about-text p { margin-bottom: 18px; }
+  .about-text p:last-child { margin-bottom: 0; }
+  .about-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    background: var(--border-light);
+    border: 1px solid var(--border-light);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .about-stat {
+    background: var(--bg);
+    padding: 18px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .about-stat-num {
+    font-family: 'Instrument Serif', serif;
+    font-size: 1.7rem;
+    color: var(--text);
+    line-height: 1;
+  }
+  .about-stat-label { font-size: 0.75rem; color: var(--muted); }
+
+  /* HERO FADE-IN ANIMATION */
+  .hero-fade { opacity: 0; transform: translateY(18px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .hero-fade.visible { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 768px) {
+    /* NAV */
+    nav { padding: 16px 20px; }
+    .nav-hamburger { display: flex; }
+    .nav-links {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: #f0ece3;
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: stretch;
+      gap: 0;
+      list-style: none;
+      z-index: 9999;
+    }
+    .nav-links.open { display: flex !important; }
+    .nav-links li { width: 100%; border-bottom: 1px solid var(--border); }
+    .nav-links li:first-child { border-top: 1px solid var(--border); margin-top: 60px; }
+    .nav-links a { display: block; padding: 20px 32px; font-size: 1.1rem; color: var(--text); letter-spacing: 0.02em; font-weight: 400; }
+    .nav-links a[style*="accent"] { color: var(--accent) !important; }
+
+    /* LAYOUT */
+    .hero-wrap, .page-wrap { padding: 0 20px; }
+    #contact-wrap { padding: 56px 20px 48px; }
+
+    /* HERO — stack: name first, then photo+meta row, then bio+ctas */
+    #hero { padding: 76px 0 36px; min-height: auto; }
+    .hero-inner {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    /* Photo full width, meta below */
+    .hero-right {
+      order: 2;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* Photo: full width tall portrait */
+    .hero-photo-frame {
+      width: 100% !important;
+      height: 400px !important;
+      aspect-ratio: unset !important;
+      border-radius: 6px !important;
+      box-shadow: 4px 6px 20px rgba(26,24,21,0.15) !important;
+    }
+    .hero-photo {
+      width: 100% !important;
+      height: 100% !important;
+      object-fit: cover !important;
+      object-position: center 20% !important;
+    }
+
+    /* Meta rows below photo */
+    .hero-meta { width: 100%; }
+    .hero-meta-row {
+      grid-template-columns: 80px 1fr;
+      gap: 8px;
+      padding: 9px 0;
+    }
+    .meta-label { font-size: 0.6rem; }
+    .meta-value { font-size: 0.8rem; line-height: 1.45; }
+
+    /* Name first, photo+meta second */
+    .hero-left { order: 1; }
+    .hero-right { order: 2; }
+    h1 { font-size: 2.4rem; margin-bottom: 14px; }
+    .hero-bio { font-size: 0.88rem; line-height: 1.7; margin-bottom: 20px; }
+    .hero-ctas { gap: 10px; flex-wrap: wrap; }
+    .btn-primary, .btn-ghost { font-size: 0.78rem; padding: 10px 18px; }
+
+    /* SECTIONS */
+    section.inner { padding: 48px 0; }
+    .section-label { margin-bottom: 32px; }
+
+    /* EXPERIENCE */
+    .exp-item {
+      grid-template-columns: 1fr;
+      gap: 4px;
+      padding: 22px 0;
+    }
+    .exp-date { font-size: 0.71rem; margin-bottom: 3px; }
+    .exp-badge { font-size: 0.57rem; }
+    .exp-role { font-size: 0.9rem; margin-bottom: 2px; }
+    .exp-company { font-size: 0.75rem; margin-bottom: 8px; }
+    .exp-bullets { gap: 7px; }
+    .exp-bullets li { font-size: 0.81rem; line-height: 1.58; padding-left: 12px; }
+
+    /* PROJECTS */
+    .project-item {
+      grid-template-columns: 1fr;
+      gap: 4px;
+      padding: 22px 0;
+    }
+    .project-name { font-size: 0.9rem; margin-bottom: 7px; }
+    .project-desc { font-size: 0.81rem; line-height: 1.65; margin-bottom: 10px; }
+    .project-stack { gap: 4px; margin-bottom: 10px; }
+    .tag { font-size: 0.63rem; padding: 2px 7px; }
+    .project-year { font-size: 0.71rem; }
+
+    /* SKILLS */
+    .skills-grid { grid-template-columns: 1fr 1fr; }
+    .skill-col { padding: 16px 14px; }
+    .skill-col-title { font-size: 0.57rem; margin-bottom: 10px; padding-bottom: 8px; }
+    .skill-item { font-size: 0.79rem; gap: 7px; }
+
+    /* EDUCATION */
+    .edu-item { grid-template-columns: 1fr; gap: 6px; padding: 22px 0; }
+    .edu-year { font-size: 0.71rem; }
+    .edu-school { font-size: 0.95rem; }
+    .edu-degree { font-size: 0.78rem; margin-bottom: 12px; }
+    .coursework-label { font-size: 0.6rem; }
+    .coursework-grid { grid-template-columns: 1fr; }
+    .course-item { padding: 13px 15px; }
+    .course-code { font-size: 0.62rem; }
+    .course-name { font-size: 0.81rem; }
+    .course-desc { font-size: 0.74rem; line-height: 1.55; }
+
+    /* NOW */
+    .now-grid { grid-template-columns: 1fr; gap: 1px; }
+    .now-col { padding: 20px 18px; }
+    .now-col-title { font-size: 0.6rem; margin-bottom: 14px; padding-bottom: 8px; }
+    .now-item { padding: 9px 0; }
+    .now-item-title { font-size: 0.83rem; }
+    .now-item-sub { font-size: 0.74rem; line-height: 1.5; }
+
+    /* ABOUT */
+    .about-grid { grid-template-columns: 1fr; gap: 24px; }
+    .about-text p { font-size: 0.85rem; line-height: 1.75; margin-bottom: 14px; }
+    .about-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border-light); border: 1px solid var(--border-light); border-radius: 3px; overflow: hidden; }
+    .about-stat { padding: 14px 14px; background: var(--bg); }
+    .about-stat-num { font-size: 1.45rem; }
+    .about-stat-label { font-size: 0.68rem; line-height: 1.4; }
+
+    /* CONTACT */
+    .contact-inner { grid-template-columns: 1fr; gap: 28px; }
+    .contact-heading { font-size: 2.2rem; }
+    .contact-sub { font-size: 0.85rem; }
+    .contact-links { gap: 0; }
+    .contact-link { padding: 13px 14px; font-size: 0.84rem; }
+    .contact-link-meta { font-size: 0.72rem; }
+
+    /* FOOTER */
+    footer { padding: 18px 20px; flex-direction: column; gap: 4px; text-align: center; }
+    .footer-text { font-size: 0.75rem; }
+  }
+
+  .nav-logo {
+    font-family: 'Instrument Serif', serif;
+    font-size: 1.1rem;
+    color: var(--text);
+    text-decoration: none;
+  }
+
+  .nav-links { display: flex; gap: 36px; list-style: none; }
+
+  .nav-links a {
+    font-size: 0.82rem;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--text); }
+
+  /* HERO */
+  .hero-wrap {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 64px;
+  }
+
+  #hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 140px 0 100px;
+  }
+
+  .hero-inner {
+    display: grid;
+    grid-template-columns: 1fr 240px;
+    gap: 80px;
+    align-items: center;
+    width: 100%;
+  }
+
+  .hero-left { display: flex; flex-direction: column; }
+
+  h1 {
+    font-family: 'Instrument Serif', serif;
+    font-size: clamp(3rem, 5.5vw, 5rem);
+    font-weight: 400;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    margin-bottom: 24px;
+  }
+
+  h1 em { font-style: italic; color: var(--muted); }
+
+  .hero-bio {
+    font-size: 1rem;
+    color: var(--muted);
+    line-height: 1.8;
+    margin-bottom: 36px;
+    max-width: 480px;
+  }
+
+  .hero-ctas { display: flex; gap: 12px; flex-wrap: wrap; }
+
+  .btn-primary {
+    background: #1e4a2a;
+    color: #f5f2ec;
+    font-size: 0.82rem;
+    padding: 11px 24px;
+    border: 1px solid #1e4a2a;
+    text-decoration: none;
+    transition: all 0.2s;
+    display: inline-block;
+    border-radius: 2px;
+  }
+
+  .btn-primary:hover { background: #163820; border-color: #163820; }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--muted);
+    font-size: 0.82rem;
+    padding: 11px 24px;
+    border: 1px solid var(--border);
+    text-decoration: none;
+    transition: all 0.2s;
+    display: inline-block;
+    border-radius: 2px;
+  }
+
+  .btn-ghost:hover { border-color: var(--text); color: var(--text); }
+
+  /* HERO RIGHT: photo + meta */
+  .hero-right {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .hero-photo-frame {
+    width: 100%;
+    aspect-ratio: 3/4;
+    border-radius: 4px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 6px 10px 32px rgba(26,24,21,0.18), 2px 3px 8px rgba(26,24,21,0.10);
+  }
+
+  .hero-photo-frame::after {
+    content: none;
+  }
+
+  .hero-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 8%;
+    display: block;
+    border-radius: 3px;
+  }
+
+  .hero-meta { display: flex; flex-direction: column; gap: 0; }
+
+  .hero-meta-row {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 12px;
+    padding: 11px 0;
+    border-bottom: 1px solid var(--border-light);
+    align-items: start;
+  }
+
+  .hero-meta-row:first-child { border-top: 1px solid var(--border-light); }
+
+  .meta-label {
+    font-size: 0.66rem;
+    color: var(--muted2);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding-top: 2px;
+  }
+
+  .meta-value { font-size: 0.83rem; color: var(--text); line-height: 1.5; }
+
+  /* PAGE WRAP */
+  .page-wrap { max-width: 1100px; margin: 0 auto; padding: 0 64px; }
+
+  section.inner {
+    padding: 88px 0;
+    border-top: 1px solid var(--border-light);
+  }
+
+  .section-label {
+    font-size: 0.66rem;
+    color: var(--muted2);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 48px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border-light);
+  }
+
+  /* EXPERIENCE */
+  .exp-item {
+    display: grid;
+    grid-template-columns: 190px 1fr;
+    gap: 40px;
+    padding: 32px 0;
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  .exp-item:first-child { border-top: 1px solid var(--border-light); }
+
+  .exp-date { font-size: 0.75rem; color: var(--muted2); margin-bottom: 8px; line-height: 1.5; }
+
+  .exp-badge {
+    display: inline-block;
+    background: var(--accent-light);
+    color: var(--accent);
+    font-size: 0.6rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 2px;
+  }
+
+  .exp-role {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.97rem;
+    font-weight: 500;
+    margin-bottom: 3px;
+  }
+
+  .exp-company { font-size: 0.79rem; color: var(--accent); margin-bottom: 12px; }
+
+  .exp-bullets { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+
+  .exp-bullets li {
+    font-size: 0.85rem;
+    color: var(--muted);
+    padding-left: 14px;
+    position: relative;
+    line-height: 1.65;
+  }
+
+  .exp-bullets li::before { content: '–'; position: absolute; left: 0; color: var(--muted2); }
+
+  /* PROJECTS — same font as experience */
+  .project-item {
+    display: grid;
+    grid-template-columns: 190px 1fr;
+    gap: 40px;
+    padding: 32px 0;
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  .project-item:first-child { border-top: 1px solid var(--border-light); }
+
+  .project-status {
+    display: inline-block;
+    font-size: 0.6rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 2px;
+    margin-bottom: 6px;
+  }
+
+  .status-active { background: var(--accent-light); color: var(--accent); }
+  .status-proto { background: #ece5dc; color: var(--accent2); }
+  .status-done { background: var(--tag-bg); color: var(--tag-text); }
+
+  .project-year { font-size: 0.74rem; color: var(--muted2); margin-top: 4px; }
+
+  .project-name {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.97rem;
+    font-weight: 500;
+    margin-bottom: 10px;
+    line-height: 1.3;
+  }
+
+  .project-desc { font-size: 0.85rem; color: var(--muted); line-height: 1.75; margin-bottom: 16px; }
+
+  .project-stack { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 14px; }
+
+  .tag {
+    font-size: 0.68rem;
+    color: var(--tag-text);
+    background: var(--tag-bg);
+    padding: 3px 9px;
+    border-radius: 2px;
+  }
+
+  .project-link {
+    font-size: 0.77rem;
+    color: var(--accent);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: gap 0.2s;
+  }
+
+  .project-link:hover { gap: 9px; }
+
+  /* SKILLS */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border-light);
+    border: 1px solid var(--border-light);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .skill-col { background: var(--bg); padding: 28px 26px; }
+
+  .skill-col-title {
+    font-size: 0.64rem;
+    color: var(--muted2);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  .skill-items { display: flex; flex-direction: column; gap: 8px; }
+
+  .skill-item {
+    font-size: 0.85rem;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 9px;
+  }
+
+  .skill-item::before {
+    content: '';
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: var(--muted2);
+    flex-shrink: 0;
+  }
+
+  /* EDUCATION */
+  .edu-item {
+    display: grid;
+    grid-template-columns: 190px 1fr;
+    gap: 40px;
+    padding: 32px 0;
+    border-top: 1px solid var(--border-light);
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  .edu-year { font-size: 0.75rem; color: var(--muted2); }
+  .edu-school {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+  .edu-degree { font-size: 0.81rem; color: var(--accent); margin-bottom: 16px; }
+  .edu-courses { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 14px; }
+  .edu-honor { font-size: 0.8rem; color: var(--accent); }
+
+  .coursework-label {
+    font-size: 0.66rem;
+    color: var(--muted2);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 16px;
+  }
+
+  .coursework-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: var(--border-light);
+    border: 1px solid var(--border-light);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .course-item {
+    background: var(--bg);
+    padding: 18px 20px;
+  }
+
+  .course-code {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    margin-bottom: 4px;
+  }
+
+  .course-name {
+    font-size: 0.86rem;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 5px;
+    line-height: 1.3;
+  }
+
+  .course-desc {
+    font-size: 0.78rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* CONTACT */
+  #contact-wrap { padding: 88px 0 72px; border-top: 1px solid var(--border-light); }
+
+  .contact-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: start;
+  }
+
+  .contact-heading {
+    font-family: 'Instrument Serif', serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 400;
+    line-height: 1.15;
+    margin-bottom: 14px;
+  }
+
+  .contact-sub { font-size: 0.88rem; color: var(--muted); line-height: 1.75; }
+
+  .contact-links { display: flex; flex-direction: column; }
+
+  .contact-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 0;
+    border-bottom: 1px solid var(--border-light);
+    text-decoration: none;
+    color: var(--text);
+    font-size: 0.88rem;
+    transition: color 0.2s;
+  }
+
+  .contact-link:first-child { border-top: 1px solid var(--border-light); }
+  .contact-link-meta { font-size: 0.73rem; color: var(--muted2); margin-top: 2px; }
+
+  .contact-link-arrow {
+    color: var(--accent);
+    transition: transform 0.25s ease;
+  }
+
+  .contact-link:hover .contact-link-arrow { transform: translateX(6px); }
+
+  footer {
+    border-top: 1px solid var(--border-light);
+    padding: 22px 64px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-text { font-size: 0.73rem; color: var(--muted2); }
+
+  .fade-in { opacity: 0; transform: translateY(14px); transition: opacity 0.5s ease, transform 0.5s ease; }
+  .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 960px) {
+    nav { padding: 16px 24px; }
+    .hero-wrap, .page-wrap { padding: 0 24px; }
+    .hero-inner { grid-template-columns: 1fr; gap: 40px; }
+    .hero-right { flex-direction: row; gap: 24px; }
+
+    .exp-item, .project-item, .edu-item { grid-template-columns: 1fr; gap: 10px; }
+    .skills-grid { grid-template-columns: 1fr 1fr; }
+    .contact-inner { grid-template-columns: 1fr; gap: 40px; }
+    footer { padding: 20px 24px; flex-direction: column; gap: 4px; }
+  }
+
+  @media (max-width: 600px) {
+    h1 { font-size: 2.6rem; }
+    .skills-grid { grid-template-columns: 1fr; }
+    .hero-right { flex-direction: column; }
+  }
+
+  /* Section labels in accent */
+  .section-label { color: var(--accent); }
+
+  /* Skill item dot */
+  .skill-item::before { background: var(--accent); opacity: 0.5; width: 4px; height: 4px; }
+
+</style>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+CiAgPHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iNiIgZmlsbD0iIzJkNWEzZCIvPgogIDx0ZXh0IHg9IjE2IiB5PSIyMiIgZm9udC1mYW1pbHk9Ikdlb3JnaWEsc2VyaWYiIGZvbnQtc2l6ZT0iMTQiIGZvbnQtd2VpZ2h0PSI2MDAiIGZpbGw9IiNmNWYyZWMiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGxldHRlci1zcGFjaW5nPSIwLjUiPkFVPC90ZXh0Pgo8L3N2Zz4=">
+</head>
+<body>
+
+<nav>
+  <a href="#hero" class="nav-logo">Anirudha Ugile</a>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="#now">Now</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#education">Education</a></li>
+    <li><a href="#contact-wrap">Contact</a></li>
+    
+  </ul>
+  <button class="nav-hamburger" id="nav-hamburger" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="hero-wrap">
+<section id="hero">
+  <div class="hero-inner">
+    <div class="hero-left hero-fade" style="transition-delay:0.05s">
+      <h1>Anirudha<br><em>Ugile.</em></h1>
+      <p class="hero-bio">
+          Sophomore at UW–Madison studying Data Science and Information Science, building toward a career in data analytics and data science. Currently gaining hands-on systems experience across two concurrent IT roles serving 60,000+ users — while actively developing my Python, SQL, and visualization stack through coursework, projects, and independent study.
+        </p>
+      <div class="hero-ctas">
+        <a href="#projects" class="btn-primary">View My Work</a>
+        <a href="resume.pdf" download class="btn-ghost">Download Resume ↓</a>
+      </div>
+    </div>
+    <div class="hero-right hero-fade" style="transition-delay:0.2s">
+      <div class="hero-photo-frame">
+        <img src="photo.jpg" alt="Anirudha Ugile" class="hero-photo">
+      </div>
+      <div class="hero-meta">
+        <div class="hero-meta-row">
+          <span class="meta-label">Location</span>
+          <span class="meta-value">Madison, Wisconsin</span>
+        </div>
+        <div class="hero-meta-row">
+          <span class="meta-label">School</span>
+          <span class="meta-value">UW–Madison, Class of 2028</span>
+        </div>
+        <div class="hero-meta-row">
+          <span class="meta-label">Studying</span>
+          <span class="meta-value">Data Science + Information Science<br><span style="color:var(--muted2); font-size:0.78rem;">Minor in Computer Science</span></span>
+        </div>
+        <div class="hero-meta-row">
+          <span class="meta-label">Work</span>
+          <span class="meta-value">Systems Engineer<br>IT Operations Analyst</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+</div>
+
+
+<div class="page-wrap">
+<section class="inner" id="now" style="padding-top:56px; padding-bottom:56px;">
+  <div class="section-label">Now</div>
+  <div class="now-grid">
+
+    <div class="now-col fade-in">
+      <div class="now-col-title"><span class="now-dot"></span>Building</div>
+      <div class="now-item">
+        <div class="now-item-title">Termly — Semester Load Forecaster</div>
+        <div class="now-item-sub">AI-powered syllabus parser that stress-maps your semester before it starts. Active development.</div>
+      </div>
+      <div class="now-item">
+        <div class="now-item-title">Analytics Dashboard — IT Incident Trends</div>
+        <div class="now-item-sub">Building a Python + Plotly dashboard to visualize incident volume patterns and resolution metrics from my DoIT work. Turning operational data into something actionable.</div>
+      </div>
+      <div class="now-item">
+        <div class="now-item-title">Data Structures & Algorithms Deep Dive</div>
+        <div class="now-item-sub">Systematically working through trees, graphs, and dynamic programming in Python — building problem-solving fluency for technical interviews.</div>
+      </div>
+    </div>
+
+    <div class="now-col fade-in">
+      <div class="now-col-title">Learning</div>
+      <div class="now-item">
+        <div class="now-item-title">Python — Advanced Patterns</div>
+        <div class="now-item-sub">OOP, decorators, generators, and data pipeline design beyond the basics.</div>
+      </div>
+      <div class="now-item">
+        <div class="now-item-title">SQL & Data Modeling</div>
+        <div class="now-item-sub">Complex joins, window functions, schema normalization, and query optimization.</div>
+      </div>
+      <div class="now-item">
+        <div class="now-item-title">Tableau & Data Visualization</div>
+        <div class="now-item-sub">Advanced dashboard design, calculated fields, LOD expressions, and storytelling with data.</div>
+      </div>
+      <div class="now-item">
+        <div class="now-item-title">Gephi & Network Analysis</div>
+        <div class="now-item-sub">Graph layouts, centrality metrics, and visualizing complex relational datasets.</div>
+      </div>
+      <div class="now-item">
+        <div class="now-item-title">Excel — Power Features</div>
+        <div class="now-item-sub">Power Query, pivot tables, dynamic arrays, and spreadsheet-based analytical modeling.</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+</div>
+
+<div class="page-wrap">
+
+<section class="inner" id="about">
+  <div class="section-label">About</div>
+  <div class="about-grid">
+    <div class="about-text fade-in">
+      <p>I'm a sophomore at UW–Madison studying Data Science and Information Science, focused on building a strong technical foundation across data analytics, systems, and software.</p>
+      <p>I find the same satisfaction in debugging a broken authentication workflow as I do in cleaning a messy dataset — both are about making complex things work cleanly and reliably. That overlap between data and systems is where I operate best.</p>
+      <p>Outside of work and school: I've led national-level dance teams, served in student governance, love travelling, and think seriously about how technology shapes the world around us. Those experiences inform how I approach problems — with people in mind, not just the data.</p>
+    </div>
+    <div class="about-stats fade-in">
+      <div class="about-stat">
+        <div class="about-stat-num">60,000+</div>
+        <div class="about-stat-label">Users served daily across UW–Madison's IT infrastructure</div>
+      </div>
+      <div class="about-stat">
+        <div class="about-stat-num">50+</div>
+        <div class="about-stat-label">Weekly enterprise access incidents resolved at DoIT</div>
+      </div>
+      <div class="about-stat">
+        <div class="about-stat-num">300+</div>
+        <div class="about-stat-label">Devices managed per semester across library endpoints</div>
+      </div>
+      <div class="about-stat">
+        <div class="about-stat-num">3.625</div>
+        <div class="about-stat-label">GPA — Spring 2025 Dean's List after a full academic rebuild</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="inner" id="experience">
+  <div class="section-label">Experience</div>
+
+  <div class="exp-item fade-in">
+    <div>
+      <div class="exp-date">Jan 2026 — Present</div>
+      <span class="exp-badge">Current</span>
+    </div>
+    <div>
+      <div class="exp-role">Systems Engineer</div>
+      <div class="exp-company">Division of Information Technology (DoIT), UW-Madison</div>
+      <ul class="exp-bullets">
+        <li>Triaged and resolved 50+ weekly IAM incidents across NetID/SSO, Duo MFA, Microsoft 365, Canvas, and Zoom — restoring secure access for 60,000+ campus users while maintaining compliance within a high-trust enterprise ITSM environment</li>
+        <li>Identified 15+ recurring failure patterns weekly — MFA reactivation errors, token conflicts, certificate issues — and built structured resolution paths in Cherwell so the same problems stop generating repeat tickets</li>
+        <li>Handled 30–60 live requests per shift via Cisco Finesse, executing rapid triage and account recovery workflows under time pressure with full audit documentation on every case</li>
+        <li>Converted high-frequency incident signatures into reusable Cherwell knowledge base entries — cutting investigation time for common failure classes and improving consistency across the support team</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="exp-item fade-in">
+    <div>
+      <div class="exp-date">Jan 2026 — Present</div>
+      <span class="exp-badge">Current</span>
+    </div>
+    <div>
+      <div class="exp-role">IT Service Operations Analyst</div>
+      <div class="exp-company">Library Technology Group (LTG), UW-Madison</div>
+      <ul class="exp-bullets">
+        <li>Owned incident operations across 7+ UW library locations — triaging and closing 25+ weekly endpoint, network, and hardware failures through Redmine-tracked workflows to keep high-traffic student and staff environments running</li>
+        <li>Imaged, configured, and validated 30+ Dell and Apple devices per month — covering staff workstations, public terminals, and circulation laptops so device availability stays consistent across all library branches</li>
+        <li>Used Lansweeper and Bomgar to maintain visibility and remote diagnostic access across 300+ devices per semester — surfacing issues before they escalate and improving resolution speed through accurate asset-level root-cause notes</li>
+        <li>Tracked incident volume trends to identify recurring failure categories and workflow bottlenecks — translating those patterns into SLA adjustments and resolution templates that reduce time-to-close on repeat issues</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="exp-item fade-in">
+    <div><div class="exp-date">May 2025 — Jan 2026</div></div>
+    <div>
+      <div class="exp-role">IT Operations Level 2</div>
+      <div class="exp-company">Library Technology Group (LTG), UW-Madison</div>
+      <ul class="exp-bullets">
+        <li>Handled endpoint operations and incident resolution across UW library spaces — responsible for restoring service availability for staff workstations, public computing devices, and classroom environments</li>
+        <li>Performed hands-on device imaging and reimaging for Dell and Apple endpoints, including workstation deployment, configuration, and field troubleshooting</li>
+        <li>Resolved printing infrastructure and network connectivity failures across multiple library branches, minimizing downtime during peak usage hours</li>
+        <li>Maintained clean, structured incident documentation in Redmine to support accurate shift handoffs and faster diagnosis of repeat issues</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="exp-item fade-in">
+    <div><div class="exp-date">Nov 2024 — May 2025</div></div>
+    <div>
+      <div class="exp-role">IT Operations Level 1</div>
+      <div class="exp-company">Library Technology Group (LTG), UW-Madison</div>
+      <ul class="exp-bullets">
+        <li>Served as first point of contact for technology issues across library locations — handling access problems, printing failures, and workstation disruptions in a high-volume environment</li>
+        <li>Developed strong triage instincts and documentation habits early: learned to quickly categorize issues by impact, route appropriately, and close tickets with enough detail for the next person</li>
+        <li>Consistency and reliability in this role directly led to promotion to Level 2 within six months</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="exp-item fade-in">
+    <div><div class="exp-date">Jan 2025 — Sep 2025</div></div>
+    <div>
+      <div class="exp-role">Engineering Early Talent Fellow</div>
+      <div class="exp-company">Goldman Sachs</div>
+      <ul class="exp-bullets">
+        <li>Competitively selected for Goldman Sachs Engineering Possibilities — completed 5+ technical modules across problem formulation, system design, and analytical reasoning, delivering 2+ presentations within strict time constraints</li>
+        <li>Worked in a 5-person team on data engineering exercises — explored and analyzed datasets in Python, then translated findings into structured technical summaries presented to program stakeholders</li>
+        <li>Iterated through 10+ interview-style technical problems under a structured feedback loop — sharpening both reasoning precision and the ability to communicate solutions clearly under pressure</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="exp-item fade-in">
+    <div><div class="exp-date">Oct 2025 — Jan 2026</div></div>
+    <div>
+      <div class="exp-role">Associate Justice — Student Judiciary</div>
+      <div class="exp-company">Associated Students of Madison (ASM)</div>
+      <ul class="exp-bullets">
+        <li>Appointed Associate Justice within UW–Madison's student governance judiciary — evaluated organization disputes and policy cases affecting 60,000+ students using structured procedural frameworks and evidence-based review standards</li>
+        <li>Produced written rulings for 100% of assigned cases — documenting reasoning, precedent alignment, and final determinations so that outcomes were consistent, auditable, and defensible across high-sensitivity governance cases</li>
+        <li>Applied fact-finding and policy interpretation methodologies to multi-stakeholder disputes — resulting in reduced ambiguity in outcomes and improved trust in student governance processes</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="exp-item fade-in">
+    <div><div class="exp-date">Sep 2024 — May 2025</div></div>
+    <div>
+      <div class="exp-role">Program Operations Coordinator</div>
+      <div class="exp-company">Transcend UW</div>
+      <ul class="exp-bullets">
+        <li>Coordinated end-to-end logistics for student programs and events — managing schedules, resources, vendor coordination, and day-of execution across multiple concurrent initiatives</li>
+        <li>Built strong habits in real-time problem solving: when things went sideways during events, owned the fix on the spot rather than escalating</li>
+        <li>Strengthened communication and team coordination skills that directly translate to technical team environments and cross-functional project work</li>
+      </ul>
+    </div>
+  </div>
+
+</section>
+
+<section class="inner" id="projects">
+  <div class="section-label">Projects</div>
+
+  <div class="project-item fade-in">
+    <div>
+      <span class="project-status status-active">Active</span>
+      <div class="project-year">2025 – present</div>
+    </div>
+    <div>
+      <div class="project-name">Termly — Semester Load Forecasting Tool</div>
+      <p class="project-desc">AI-powered academic planning tool that helps students visualize their semester workload before it overwhelms them. Upload syllabi, connect Canvas, and Termly extracts every deadline, weights it by grade impact, and renders a color-coded stress heatmap — surfacing crunch weeks, flagging conflicts, and generating prep recommendations weeks in advance.</p>
+      <div class="project-stack">
+        <span class="tag">Python</span><span class="tag">Streamlit</span><span class="tag">Claude API</span><span class="tag">pdfplumber</span><span class="tag">Plotly</span><span class="tag">Pandas</span><span class="tag">SQLite</span><span class="tag">Git</span>
+      </div>
+      <a href="https://github.com/anirudhaugile/termly" target="_blank" class="project-link">View on GitHub →</a>
+    </div>
+  </div>
+
+  <div class="project-item fade-in">
+    <div>
+      <span class="project-status status-done">Completed</span>
+      <div class="project-year">2025</div>
+    </div>
+    <div>
+      <div class="project-name">Tech Workforce Dynamics (2000–2025)</div>
+      <p class="project-desc">A data analytics project examining employment trends in the tech sector over 25 years. Explores hiring cycles, layoffs, macroeconomic influences, and workforce shifts — built as a full pipeline from raw data through statistical analysis to interactive Tableau dashboards.</p>
+      <div class="project-stack">
+        <span class="tag">Python</span><span class="tag">R</span><span class="tag">SQL</span><span class="tag">Tableau</span>
+      </div>
+      <a href="https://github.com/anirudhaugile/tech-workforce-dynamics-2000-2025" target="_blank" class="project-link">View on GitHub →</a>
+    </div>
+  </div>
+
+  <div class="project-item fade-in">
+    <div>
+      <span class="project-status status-proto">Prototype</span>
+      <div class="project-year">2025</div>
+    </div>
+    <div>
+      <div class="project-name">SeatSense UW</div>
+      <p class="project-desc">A prototype campus tool to help students find available seating in UW–Madison's College Library. Visualizes occupancy patterns across study zones (Z1–Z5) using interactive floor-plan overlays and heatmaps.</p>
+      <div class="project-stack">
+        <span class="tag">Python</span><span class="tag">Streamlit</span><span class="tag">Plotly</span>
+      </div>
+      <a href="https://github.com/anirudhaugile/seat-sense-uw" target="_blank" class="project-link">View on GitHub →</a>
+    </div>
+  </div>
+
+  <div class="project-item fade-in">
+    <div>
+      <span class="project-status status-done">Completed</span>
+      <div class="project-year">2025</div>
+    </div>
+    <div>
+      <div class="project-name">Coffee Machine Simulator</div>
+      <p class="project-desc">A Java command-line program that simulates a fully functional coffee machine — handling multiple drink types, ingredient tracking, refill management, and state transitions. Built to develop rigorous OOP fundamentals: modular design, state management, and clean I/O handling.</p>
+      <div class="project-stack">
+        <span class="tag">Java</span><span class="tag">OOP</span><span class="tag">CLI</span>
+      </div>
+      <a href="https://github.com/anirudhaugile/CoffeeMachineSimulator" target="_blank" class="project-link">View on GitHub →</a>
+    </div>
+  </div>
+
+</section>
+
+<section class="inner" id="skills">
+  <div class="section-label">Skills</div>
+  <div class="skills-grid">
+
+    <div class="skill-col fade-in">
+      <div class="skill-col-title">Languages</div>
+      <div class="skill-items">
+        <div class="skill-item">Python</div>
+        <div class="skill-item">R</div>
+        <div class="skill-item">SQL</div>
+        <div class="skill-item">Java</div>
+      </div>
+    </div>
+
+    <div class="skill-col fade-in">
+      <div class="skill-col-title">Data & Analytics</div>
+      <div class="skill-items">
+        <div class="skill-item">Tableau</div>
+        <div class="skill-item">Pandas / NumPy</div>
+        <div class="skill-item">Plotly / Matplotlib</div>
+        <div class="skill-item">Statistical Modeling</div>
+        <div class="skill-item">Data Cleaning & Prep</div>
+      </div>
+    </div>
+
+    <div class="skill-col fade-in">
+      <div class="skill-col-title">Tools &amp; Platforms</div>
+      <div class="skill-items">
+        <div class="skill-item">Git / GitHub</div>
+        <div class="skill-item">Streamlit</div>
+        <div class="skill-item">RStudio</div>
+        <div class="skill-item">Gephi</div>
+        <div class="skill-item">Redmine / Jira / ITSM</div>
+        <div class="skill-item">Cherwell ITSM</div>
+      </div>
+    </div>
+
+    <div class="skill-col fade-in">
+      <div class="skill-col-title">IT & Systems</div>
+      <div class="skill-items">
+        <div class="skill-item">Identity & Access Management</div>
+        <div class="skill-item">Incident Triage</div>
+        <div class="skill-item">SSO / MFA / Active Directory</div>
+        <div class="skill-item">Endpoint Imaging & Deployment</div>
+        <div class="skill-item">Root Cause Analysis</div>
+      </div>
+    </div>
+
+    <div class="skill-col fade-in">
+      <div class="skill-col-title">Concepts</div>
+      <div class="skill-items">
+        <div class="skill-item">Analytics Pipeline Design</div>
+        <div class="skill-item">OOP & Software Design</div>
+        <div class="skill-item">AI / LLM Integration</div>
+        <div class="skill-item">Data Visualization</div>
+      </div>
+    </div>
+
+    <div class="skill-col fade-in">
+      <div class="skill-col-title">Working Style</div>
+      <div class="skill-items">
+        <div class="skill-item">Technical Documentation</div>
+        <div class="skill-item">Cross-team Communication</div>
+        <div class="skill-item">Escalation & Prioritization</div>
+        <div class="skill-item">Problem Decomposition</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section class="inner" id="education">
+  <div class="section-label">Education</div>
+  <div class="edu-item fade-in">
+    <div>
+      <div class="edu-year">2024 – 2028</div>
+    </div>
+    <div>
+      <div class="edu-school">University of Wisconsin–Madison</div>
+      <div class="edu-degree">B.S. Data Science &amp; B.S. Information Science · Minor in Computer Science</div>
+      <div class="edu-honor" style="margin-bottom:28px;">🏆 Dean's List — Spring 2025</div>
+
+      <div class="coursework-label">Relevant Coursework</div>
+      <div class="coursework-grid">
+
+        <div class="course-item">
+          <div class="course-code">CS 320</div>
+          <div class="course-name">Data Science Programming II</div>
+          <div class="course-desc">Python-focused data science workflows — built reproducible analysis pipelines using Pandas and NumPy, applied Git branching strategies for version control, and wrote automated test suites to validate data transformations on real-world datasets.</div>
+        </div>
+
+        <div class="course-item">
+          <div class="course-code">STAT 240</div>
+          <div class="course-name">Data Science Modeling I</div>
+          <div class="course-desc">Statistical foundations for data science using R — built regression and inference models, produced reproducible R Markdown reports, and applied tidyverse and ggplot2 to clean, wrangle, and visualize real datasets for analysis-ready outputs.</div>
+        </div>
+
+        <div class="course-item">
+          <div class="course-code">LIS 407</div>
+          <div class="course-name">Data Storytelling with Visualization</div>
+          <div class="course-desc">Designed data visualizations using Tableau and Python (Matplotlib / Plotly) — translated raw datasets into audience-ready narratives, applying color theory, chart selection principles, and storytelling frameworks to communicate findings with clarity and accuracy.</div>
+        </div>
+
+        <div class="course-item">
+          <div class="course-code">LIS 440</div>
+          <div class="course-name">Navigating the Data Revolution</div>
+          <div class="course-desc">Applied data ecosystem concepts through hands-on work in Excel, Python, and Pandas — performed exploratory data analysis, examined data governance frameworks, and evaluated real-world case studies on the ethical and societal implications of large-scale data collection and AI systems.</div>
+        </div>
+
+        <div class="course-item">
+          <div class="course-code">LIS 340</div>
+          <div class="course-name">Intro to Information Science</div>
+          <div class="course-desc">Examined how information is organized, indexed, and retrieved at scale — analyzed metadata standards, classification systems, and IR models, applying concepts to evaluate real information architectures used in libraries, search engines, and digital platforms.</div>
+        </div>
+
+        <div class="course-item">
+          <div class="course-code">LIS 351 ✓</div>
+          <div class="course-name">Introduction to Digital Information</div>
+          <div class="course-desc">Built hands-on fluency with SQL for querying and managing structured digital data — worked with metadata schemas, explored digital library infrastructure, and applied database design principles to organize and retrieve information across real digital collections.</div>
+        </div>
+
+        <div class="course-item">
+          <div class="course-code">CS 400 ✓</div>
+          <div class="course-name">Programming III</div>
+          <div class="course-desc">Implemented advanced data structures and algorithms in Java — built graph traversal engines, custom hash tables, and self-balancing trees from scratch, analyzing time/space complexity and optimizing for correctness and performance on large inputs.</div>
+        </div>
+
+        <div class="course-item">
+          <div class="course-code">CS 300</div>
+          <div class="course-name">Programming II</div>
+          <div class="course-desc">Developed core OOP fluency in Java — implemented recursive algorithms, built linked lists and binary trees from scratch, and applied inheritance and polymorphism to design modular, reusable program architectures.</div>
+        </div>
+
+        <div class="course-item">
+          <div class="course-code">MATH 340</div>
+          <div class="course-name">Elementary Matrix &amp; Linear Algebra</div>
+          <div class="course-desc">Worked through matrix factorization, eigenvalue decomposition, and linear transformations by hand and computationally — building the mathematical intuition behind PCA, dimensionality reduction, and the linear algebra powering modern ML models.</div>
+        </div>
+
+        <div class="course-item">
+          <div class="course-code">AAE 350</div>
+          <div class="course-name">Agricultural &amp; Applied Economics</div>
+          <div class="course-desc">Applied quantitative modeling to real-world economic datasets — built regression and cost-benefit models, interpreted econometric outputs, and developed data-driven decision frameworks for policy and resource allocation problems.</div>
+        </div>
+
+        <div class="course-item">
+          <div class="course-code">MATH 221</div>
+          <div class="course-name">Calculus &amp; Analytic Geometry I</div>
+          <div class="course-desc">Established calculus foundations essential for data science — mastered limits, derivatives, and integrals with applications to optimization and rate-of-change problems that underpin gradient descent and model training in machine learning.</div>
+        </div>
+
+        <div class="course-item">
+          <div class="course-code">MATH 222</div>
+          <div class="course-name">Calculus &amp; Analytic Geometry II</div>
+          <div class="course-desc">Extended calculus into integration techniques, infinite series, and Taylor approximations — directly applicable to probabilistic modeling, numerical methods, and the mathematical machinery behind neural networks and optimization algorithms.</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact-wrap">
+  <div class="section-label">Contact</div>
+  <div class="contact-inner">
+    <div>
+      <div class="contact-heading">Let's<br><em style="font-style:italic; font-family:'Instrument Serif',serif; color:var(--muted);">talk.</em></div>
+      <p class="contact-sub">Always happy to connect — whether it's about a project, a shared interest, or just to say hi.</p>
+    </div>
+    <div class="contact-links">
+      <a href="#" class="contact-link" id="email-primary">
+        <div>
+          <div>Email</div>
+          <div class="contact-link-meta" id="email-primary-addr"></div>
+        </div>
+        <span class="contact-link-arrow">→</span>
+      </a>
+      <a href="#" class="contact-link" id="email-uni">
+        <div>
+          <div>University Email</div>
+          <div class="contact-link-meta" id="email-uni-addr"></div>
+        </div>
+        <span class="contact-link-arrow">→</span>
+      </a>
+      <a href="https://www.linkedin.com/in/ugile/" target="_blank" class="contact-link">
+        <div>
+          <div>LinkedIn</div>
+          <div class="contact-link-meta">linkedin.com/in/ugile</div>
+        </div>
+        <span class="contact-link-arrow">→</span>
+      </a>
+      <a href="https://github.com/anirudhaugile" target="_blank" class="contact-link">
+        <div>
+          <div>GitHub</div>
+          <div class="contact-link-meta">github.com/anirudhaugile</div>
+        </div>
+        <span class="contact-link-arrow">→</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<footer>
+  <span class="footer-text">© 2026 Anirudha Ugile</span>
+  <span class="footer-text">ugile.org</span>
+</footer>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 60);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.08 });
+
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  // Hero fade-in on load
+  window.addEventListener('load', () => {
+    document.querySelectorAll('.hero-fade').forEach((el, i) => {
+      setTimeout(() => el.classList.add('visible'), 100 + i * 150);
+    });
+  });
+
+  // Mobile hamburger
+  const hamburger = document.getElementById('nav-hamburger');
+  const navLinks = document.getElementById('nav-links');
+  if (hamburger && navLinks) {
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('open');
+      navLinks.classList.toggle('open');
+    });
+    navLinks.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => {
+        hamburger.classList.remove('open');
+        navLinks.classList.remove('open');
+      });
+    });
+  }
+
+
+  window.addEventListener('scroll', () => {
+    let current = '';
+    document.querySelectorAll('[id]').forEach(s => {
+      if (window.scrollY >= s.offsetTop - 120) current = s.id;
+    });
+    document.querySelectorAll('.nav-links a').forEach(a => {
+      a.style.color = a.getAttribute('href') === '#' + current ? 'var(--text)' : '';
+    });
+  });
+
+  // Set emails via JS to prevent obfuscation
+  (function() {
+    var e1 = ['anirudhaugile', 'ugile.org'].join('@');
+    var e2 = ['ugile', 'wisc.edu'].join('@');
+    var p = document.getElementById('email-primary');
+    var u = document.getElementById('email-uni');
+    if (p) { p.href = 'mailto:' + e1; document.getElementById('email-primary-addr').textContent = e1; }
+    if (u) { u.href = 'mailto:' + e2; document.getElementById('email-uni-addr').textContent = e2; }
+  })();
+</script>
+</body>
+</html>
