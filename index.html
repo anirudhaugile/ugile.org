@@ -280,7 +280,17 @@
     text-decoration: none;
   }
 
-  .nav-links { display: flex; gap: 36px; list-style: none; }
+  .nav-links {
+    display: flex;
+    gap: 36px;
+    list-style: none;
+    position: fixed;
+    top: 0; right: 64px;
+    height: 64px;
+    align-items: center;
+    z-index: 101;
+    margin: 0; padding: 0;
+  }
   @media (max-width: 768px) {
     nav { padding: 16px 20px; }
     .nav-hamburger { display: flex; }
@@ -288,11 +298,11 @@
       display: none;
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
-      background: #d4ff00;
+      height: 100%;
+      background: #f0ece3;
       flex-direction: column;
       justify-content: center;
       align-items: stretch;
-      list-style: none;
       z-index: 10000;
       padding: 0; margin: 0;
     }
@@ -761,19 +771,19 @@
 
 <nav>
   <a href="#hero" class="nav-logo">Anirudha Ugile</a>
-  <ul class="nav-links" id="nav-links">
-    <li><a href="#now">Now</a></li>
-    <li><a href="#about">About</a></li>
-    <li><a href="#experience">Experience</a></li>
-    <li><a href="#projects">Projects</a></li>
-    <li><a href="#skills">Skills</a></li>
-    <li><a href="#education">Education</a></li>
-    <li><a href="#contact-wrap">Contact</a></li>
-  </ul>
   <button class="nav-hamburger" id="nav-hamburger" aria-label="Toggle menu">
     <span></span><span></span><span></span>
   </button>
 </nav>
+<ul class="nav-links" id="nav-links">
+  <li><a href="#now">Now</a></li>
+  <li><a href="#about">About</a></li>
+  <li><a href="#experience">Experience</a></li>
+  <li><a href="#projects">Projects</a></li>
+  <li><a href="#skills">Skills</a></li>
+  <li><a href="#education">Education</a></li>
+  <li><a href="#contact-wrap">Contact</a></li>
+</ul>
 
 <div class="hero-wrap">
 <section id="hero">
