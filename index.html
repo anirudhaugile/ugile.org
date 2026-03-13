@@ -146,26 +146,24 @@
   @media (max-width: 768px) {
     /* NAV */
     nav { padding: 16px 20px; }
-    .nav-hamburger { display: flex; }
+    .nav-hamburger { display: flex; z-index: 10001; position: relative; }
     .nav-links {
       display: none;
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
       background: #f0ece3;
-      backdrop-filter: none;
-      -webkit-backdrop-filter: none;
       flex-direction: column;
       justify-content: center;
       align-items: stretch;
-      gap: 0;
       list-style: none;
-      z-index: 9999;
+      z-index: 10000;
+      padding: 0;
+      margin: 0;
     }
-    .nav-links.open { display: flex !important; }
+    .nav-links.open { display: flex; }
     .nav-links li { width: 100%; border-bottom: 1px solid var(--border); }
-    .nav-links li:first-child { border-top: 1px solid var(--border); margin-top: 60px; }
-    .nav-links a { display: block; padding: 20px 32px; font-size: 1.1rem; color: var(--text); letter-spacing: 0.02em; font-weight: 400; }
-    .nav-links a[style*="accent"] { color: var(--accent) !important; }
+    .nav-links li:first-child { border-top: 1px solid var(--border); }
+    .nav-links a { display: block; padding: 22px 32px; font-size: 1.1rem; color: var(--text); letter-spacing: 0.02em; font-weight: 400; text-decoration: none; }
 
     /* LAYOUT */
     .hero-wrap, .page-wrap { padding: 0 20px; }
@@ -753,9 +751,8 @@
 
   /* Section labels in accent */
   .section-label { color: var(--accent); }
-
-  /* Skill item dot */
   .skill-item::before { background: var(--accent); opacity: 0.5; width: 4px; height: 4px; }
+
 
 </style>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+CiAgPHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iNiIgZmlsbD0iIzJkNWEzZCIvPgogIDx0ZXh0IHg9IjE2IiB5PSIyMiIgZm9udC1mYW1pbHk9Ikdlb3JnaWEsc2VyaWYiIGZvbnQtc2l6ZT0iMTQiIGZvbnQtd2VpZ2h0PSI2MDAiIGZpbGw9IiNmNWYyZWMiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGxldHRlci1zcGFjaW5nPSIwLjUiPkFVPC90ZXh0Pgo8L3N2Zz4=">
@@ -789,12 +786,12 @@
         </p>
       <div class="hero-ctas">
         <a href="#projects" class="btn-primary">View My Work</a>
-        <a href="resume.pdf" download class="btn-ghost">Download Resume ↓</a>
+        <a href="Resume_AUgile.pdf" download class="btn-ghost">Download Resume ↓</a>
       </div>
     </div>
     <div class="hero-right hero-fade" style="transition-delay:0.2s">
       <div class="hero-photo-frame">
-        <img src="photo.jpg" alt="Anirudha Ugile" class="hero-photo">
+        <img src="OYXME5287.JPG" alt="Anirudha Ugile" class="hero-photo">
       </div>
       <div class="hero-meta">
         <div class="hero-meta-row">
@@ -1303,15 +1300,26 @@
   const hamburger = document.getElementById('nav-hamburger');
   const navLinks = document.getElementById('nav-links');
   if (hamburger && navLinks) {
-    hamburger.addEventListener('click', () => {
+    hamburger.addEventListener('click', (e) => {
+      e.stopPropagation();
       hamburger.classList.toggle('open');
       navLinks.classList.toggle('open');
+      document.body.style.overflow = navLinks.classList.contains('open') ? 'hidden' : '';
     });
     navLinks.querySelectorAll('a').forEach(a => {
       a.addEventListener('click', () => {
         hamburger.classList.remove('open');
         navLinks.classList.remove('open');
+        document.body.style.overflow = '';
       });
+    });
+    // Close on outside click
+    document.addEventListener('click', (e) => {
+      if (navLinks.classList.contains('open') && !navLinks.contains(e.target) && !hamburger.contains(e.target)) {
+        hamburger.classList.remove('open');
+        navLinks.classList.remove('open');
+        document.body.style.overflow = '';
+      }
     });
   }
 
